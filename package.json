@@ -1,0 +1,27 @@
+{
+  "name": "backgammonjavascript",
+  "version": "1.0.0",
+  "description": "Backgammon library for studying javascript",
+  "main": "Backgammon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegomedaglia/BackgammonJavascript.git"
+  },
+  "author": "Diego Medaglia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegomedaglia/BackgammonJavascript/issues"
+  },
+  "homepage": "https://github.com/diegomedaglia/BackgammonJavascript#readme",
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
+}

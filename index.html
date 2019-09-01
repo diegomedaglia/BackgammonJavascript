@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .grid-container {
+              display: grid;
+              justify-content: space-evenly;
+              grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+              grid-gap: 10px;
+              background-color: limegreen;
+              padding: 10px;
+            }
+            .grid-container > div {
+              background-color: rgba(255, 255, 255, 0.8);
+              text-align: center;
+              padding: 20px 0;
+              font-size: 30px;
+            }
+            .dice {
+              display: grid;
+              justify-content: flex-start;
+              grid-template-columns: 50px 50px 200px 200px 200px;
+              grid-gap: 10px;
+              background-color: maroon;
+              padding: 10px;
+            }
+            .dice > div {
+                background-color: rgba(255, 255, 255, 0.8);
+              text-align: center;
+              padding: 20px 0;
+              font-size: 30px;
+            }
+            </style>
+    </head>
+    <body>
+        <div class="grid-container">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>  
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>  
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>  
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>  
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>  
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>  
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>  
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>  
+          </div>
+          <div class="dice">
+              <div id="dice1">1</div>
+              <div id="dice2">1</div>
+              <div id="turn">white</div>
+              <div id="roll">ROLL!</div>
+              <div id="done">Done</div>
+          </div>
+    </body>
+    <script type="text/javascript" src="src/Backgammon.js"></script>
+</html>
