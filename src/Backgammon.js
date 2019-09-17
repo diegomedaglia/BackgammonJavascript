@@ -3,6 +3,7 @@ class CheckerColor{}
 
 CheckerColor.WHITE = 0;
 CheckerColor.BLACK = 1;
+CheckerColor.NONE = 2;
 
 class Checker {
     constructor (color){
@@ -75,12 +76,24 @@ class Board {
         console.log(s);
         console.log("12  13  14  15  16  17 |18  19  20  21  22  23");
     }
+
+    checkersInField (fieldNo){
+        let nCheckers = this.fields[fieldNo].length;
+        let color = CheckerColor.NONE;
+        if (nCheckers > 0)
+            color = this.fields[fieldNo][0].color;
+
+        return {length:nCheckers, color:color};
+    }
 }
 
 class Dice {
     constructor(){}
     roll() {
-        return Math.floor(Math.random() * Math.floor(6));
+
+        let points =  Math.floor(Math.random() * Math.floor(6) + 1);
+        console.log(points);
+        return points;
     }
 }
 
@@ -92,9 +105,133 @@ class Game {
         this.turn = CheckerColor.WHITE;
         this.dice1 = new Dice();
         this.dice2 = new Dice();
+        this.N_FIELDS = 24;
     }
 
-    
+    roll(){
+        return{dice1: this.dice1.roll(), dice2: this.dice2.roll()};
+    }
+
+    isValidField(fieldNo){
+        return fieldNo >= 0 && fieldNo < this.N_FIELDS;
+    }
+
+    move (srcField, destField){
+        if (!this.isValidField(srcField) || 
+            !this.isValidField(destField))
+            return false;
+        
+        let sF = this.board.fields[srcField];
+        let dF = this.board.fields[destField];
+
+        if (sF.length == 0 || 
+            sF[0].color != this.turn ||
+            (dF.length != 0 && sF[0].color != dF[0].color))
+            return false;
+        
+        dF.push(sF.pop());
+        return true;
+    }
+
+    getCheckerAt(fieldNo){
+        if (this.isValidField(fieldNo) &&
+            this.board.fields[fieldNo].length > 0){
+            return this.board.fields[fieldNo][0];
+        }
+
+        return null;
+    }
+
+    checkersInField (fieldNo){
+        if (!this.isValidField(fieldNo))
+            return null;
+
+        return this.board.checkersInField(fieldNo);
+    }
 }
 
 var g = new Game();
+var selected = -1;
+
+function getFieldForDiv(div){
+    if (div.id.slice(0, 1) == "f") {
+        return parseInt(div.id.slice(1), 10) - 1;
+    }
+    return NaN;
+}
+
+function getDivForField(fieldNo){
+    if (g.isValidField(fieldNo)){
+        return document.getElementById("f" + (fieldNo + 1).toString());
+    }
+    return null;
+}
+
+function updateDiv(div){
+    let divField = getFieldForDiv(div);
+    let f = g.checkersInField(divField);
+    if (f.length > 0)
+    {
+        div.innerText = f.length;
+    }
+    else
+    {
+        div.innerText = "";
+    }
+
+    switch (f.color) {
+        case CheckerColor.NONE:
+            div.className = "nocheckers-field";
+            break;
+        case CheckerColor.WHITE:
+            div.className = "white-field";
+            break;
+        case CheckerColor.BLACK:
+            div.className = "black-field";
+            break;                        
+    }
+}
+
+function selectDiv(){
+
+    let no = getFieldForDiv(this);
+    
+    if (g.isValidField(no))
+    {
+        if (selected > -1 ) {
+            if (g.move(selected, no)) {
+                updateDiv(this);
+                updateDiv(getDivForField(selected));
+            }
+            selected = -1;
+        }
+        else {
+            let checker = g.getCheckerAt(no);
+            if (checker !== null){
+                selected = no;
+            }
+        }
+    }
+}
+
+
+function setupFieldEvents(div) {
+    div.onclick = selectDiv;
+}
+
+window.onload = () => {
+    for (let i = 1; i <= g.N_FIELDS; ++i){
+        let div = document.getElementById( "f" + i.toString() );
+
+        setupFieldEvents(div);
+        updateDiv(div);
+    }
+};
+
+function roll(){
+    let dice = g.roll();
+    console.log(dice.dice1);
+    console.log(dice.dice2);
+    document.getElementById("dice1").innerText = dice.dice1;
+    document.getElementById("dice2").innerText = dice.dice2;
+}

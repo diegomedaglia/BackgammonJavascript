@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html> 
     <head>
+        <meta charset="UTF-8">
         <style>
             .grid-container {
               display: grid;
@@ -10,8 +11,12 @@
               background-color: limegreen;
               padding: 10px;
             }
-            .grid-container > div {
-              background-color: rgba(255, 255, 255, 0.8);
+            .fieldNormal {
+              text-align: center;
+              padding: 20px 0;
+              font-size: 30px;
+            }
+            .fieldSelected {
               text-align: center;
               padding: 20px 0;
               font-size: 30px;
@@ -30,40 +35,55 @@
               padding: 20px 0;
               font-size: 30px;
             }
+
+            .black-field {
+                background-color: black;
+                color: white;
+            }
+
+            .white-field {
+                background-color: white;
+                color: black;
+            }
+
+            .nocheckers-field {
+                background-color: aquamarine;
+            }
+
             </style>
     </head>
     <body>
         <div class="grid-container">
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>  
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>  
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>  
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>  
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>  
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>  
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>  
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>  
+            <div id="f12">1</div>
+            <div id="f11">2</div>
+            <div id="f10">3</div>  
+            <div id="f9">4</div>
+            <div id="f8">5</div>
+            <div id="f7">6</div>  
+            <div id="f6">1</div>
+            <div id="f5">2</div>
+            <div id="f4">3</div>  
+            <div id="f3">4</div>
+            <div id="f2">5</div>
+            <div id="f1">6</div>  
+            <div id="f13">1</div>
+            <div id="f14">2</div>
+            <div id="f15">3</div>  
+            <div id="f16">4</div>
+            <div id="f17">5</div>
+            <div id="f18">6</div>  
+            <div id="f19">1</div>
+            <div id="f20">2</div>
+            <div id="f21">3</div>  
+            <div id="f22">4</div>
+            <div id="f23">5</div>
+            <div id="f24">6</div>  
           </div>
           <div class="dice">
               <div id="dice1">1</div>
               <div id="dice2">1</div>
               <div id="turn">white</div>
-              <div id="roll">ROLL!</div>
+              <div id="roll" onclick="roll()">ROLL!</div>
               <div id="done">Done</div>
           </div>
     </body>
