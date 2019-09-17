@@ -89,9 +89,12 @@ class Board {
 
 class Dice {
     constructor(){}
-    roll() {
+    getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
 
-        let points =  Math.floor(Math.random() * Math.floor(6) + 1);
+    roll() {
+        let points =  this.getRandomInt(1, 6);
         console.log(points);
         return points;
     }
@@ -143,10 +146,9 @@ class Game {
     }
 
     checkersInField (fieldNo){
-        if (!this.isValidField(fieldNo))
-            return null;
-
-        return this.board.checkersInField(fieldNo);
+        if (this.isValidField(fieldNo))
+            return this.board.checkersInField(fieldNo);
+        return null;
     }
 }
 
@@ -170,52 +172,54 @@ function getDivForField(fieldNo){
 function updateDiv(div){
     let divField = getFieldForDiv(div);
     let f = g.checkersInField(divField);
-    if (f.length > 0)
-    {
+    if (f.length > 0) {
         div.innerText = f.length;
     }
-    else
-    {
+    else {
         div.innerText = "";
     }
 
     switch (f.color) {
         case CheckerColor.NONE:
-            div.className = "nocheckers-field";
+            div.className = "board-field nocheckers-field";
             break;
         case CheckerColor.WHITE:
-            div.className = "white-field";
+            div.className = "board-field white-field";
             break;
         case CheckerColor.BLACK:
-            div.className = "black-field";
+            div.className = "board-field black-field";
             break;                        
     }
 }
 
 function selectDiv(){
-
     let no = getFieldForDiv(this);
     
     if (g.isValidField(no))
     {
-        if (selected > -1 ) {
-            if (g.move(selected, no)) {
+        if (selected > -1 )
+        {
+            if (g.move(selected, no)) 
+            {
                 updateDiv(this);
                 updateDiv(getDivForField(selected));
             }
+            getDivForField(selected).classList.remove("field-selected");
             selected = -1;
-        }
-        else {
+        } 
+        else
+        {
             let checker = g.getCheckerAt(no);
             if (checker !== null){
                 selected = no;
+                this.classList.add("field-selected");
             }
         }
     }
 }
 
-
-function setupFieldEvents(div) {
+function setupFieldEvents(div) 
+{
     div.onclick = selectDiv;
 }
 

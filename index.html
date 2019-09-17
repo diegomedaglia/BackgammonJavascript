@@ -11,16 +11,7 @@
               background-color: limegreen;
               padding: 10px;
             }
-            .fieldNormal {
-              text-align: center;
-              padding: 20px 0;
-              font-size: 30px;
-            }
-            .fieldSelected {
-              text-align: center;
-              padding: 20px 0;
-              font-size: 30px;
-            }
+
             .dice {
               display: grid;
               justify-content: flex-start;
@@ -29,11 +20,18 @@
               background-color: maroon;
               padding: 10px;
             }
+
             .dice > div {
                 background-color: rgba(255, 255, 255, 0.8);
               text-align: center;
               padding: 20px 0;
               font-size: 30px;
+            }
+
+            .board-field {
+                text-align: center;
+                padding: 20px 0;
+                font-size: 30px;
             }
 
             .black-field {
@@ -50,7 +48,11 @@
                 background-color: aquamarine;
             }
 
-            </style>
+            .field-selected {
+                outline: 3px inset; 
+            }
+
+        </style>
     </head>
     <body>
         <div class="grid-container">
