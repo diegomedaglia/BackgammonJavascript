@@ -269,6 +269,7 @@ window.onload = () => {
     }
 };
 
+// eslint-disable-next-line no-unused-vars
 function roll(){
     let dice = g.roll();
     console.log(dice.dice1);
