@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 
 class CheckerColor{}
 
@@ -15,8 +16,8 @@ class Board {
     constructor(){
         // white: 0->23, black: 23->0
         this.fields = new Array(24);
-        this.whiteBarCounter = new Array(24);
-        this.blackBarCounter = new Array(24);
+        this.whiteBar = new Array();
+        this.blackBar = new Array();
     }
 
     addCheckersToField(field, color, quantity){
@@ -89,19 +90,21 @@ class Board {
 
 class Dice {
     constructor(){}
-    getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
+    getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; 
     }
 
     roll() {
-        let points =  this.getRandomInt(1, 6);
+        let points =  this.getRandomIntInclusive(1, 6);
         console.log(points);
         return points;
     }
 }
 
 class Game {
-    constructor(){
+    constructor(whiteBarUpdate, blackBarUpdate){
         this.board = new Board();
         this.board.reset();
         this.board.print();
@@ -109,6 +112,8 @@ class Game {
         this.dice1 = new Dice();
         this.dice2 = new Dice();
         this.N_FIELDS = 24;
+        this.whiteBarUpdate = whiteBarUpdate;
+        this.blackBarUpdate = blackBarUpdate;
     }
 
     roll(){
@@ -119,21 +124,53 @@ class Game {
         return fieldNo >= 0 && fieldNo < this.N_FIELDS;
     }
 
-    move (srcField, destField){
-        if (!this.isValidField(srcField) || 
-            !this.isValidField(destField))
-            return false;
-        
-        let sF = this.board.fields[srcField];
-        let dF = this.board.fields[destField];
+    updateBar(checker){
+        let bar = null;
+        let barUpdateFunc = null;
+        if (checker.color == CheckerColor.WHITE){
+            bar = this.board.whiteBar;
+            barUpdateFunc = this.whiteBarUpdate;
+        } else {
+            bar = this.board.blackBar;
+            barUpdateFunc = this.blackBarUpdate;
+        }
+        bar.push(checker);
+        barUpdateFunc(bar.length);
+    }
 
-        if (sF.length == 0 || 
-            sF[0].color != this.turn ||
-            (dF.length != 0 && sF[0].color != dF[0].color))
+    move (srcFieldNo, destFieldNo){
+        if (!this.isValidField(srcFieldNo) || 
+            !this.isValidField(destFieldNo))
             return false;
         
-        dF.push(sF.pop());
+        let srcField = this.board.fields[srcFieldNo];
+        let destField = this.board.fields[destFieldNo];
+
+        if (srcField.length == 0 || 
+            srcField[0].color != this.turn ||
+            (destField.length > 1 && srcField[0].color != destField[0].color))
+            return false;
+        
+        if (destField.length > 0 && srcField[0].color != destField[0].color){
+            this.updateBar(destField.pop());
+            destField.push(srcField.pop());
+        } else {
+            destField.push(srcField.pop());
+        }
+        
+        this.endTurn();
+
         return true;
+    }
+
+    endTurn(){
+        if (this.turn == CheckerColor.WHITE) {
+            this.turn = CheckerColor.BLACK;
+            document.getElementById("turn").innerText = "black";
+        } else {
+            this.turn = CheckerColor.WHITE;
+            document.getElementById("turn").innerText = "white";
+        }
     }
 
     getCheckerAt(fieldNo){
@@ -152,7 +189,7 @@ class Game {
     }
 }
 
-var g = new Game();
+var g = new Game(whiteBarUpdate, blackBarUpdate);
 var selected = -1;
 
 function getFieldForDiv(div){
@@ -238,4 +275,12 @@ function roll(){
     console.log(dice.dice2);
     document.getElementById("dice1").innerText = dice.dice1;
     document.getElementById("dice2").innerText = dice.dice2;
+}
+
+function whiteBarUpdate(numberOfCheckers){
+    document.getElementById("whiteBarCounter").innerText = numberOfCheckers;
+}
+
+function blackBarUpdate(numberOfCheckers){
+    document.getElementById("blackBarCounter").innerText = numberOfCheckers;
 }
