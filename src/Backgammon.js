@@ -21,13 +21,13 @@ class Board {
     }
 
     addCheckersToField(field, color, quantity){
-        for (var i = 0; i < quantity; i++)
+        for (let i = 0; i < quantity; i++)
             field.push(new Checker(color));
     }
 
     reset() {
         this.fields = new Array(24);
-        for (var i = 0; i < this.fields.length; i++)
+        for (let i = 0; i < this.fields.length; i++)
             this.fields[i] = new Array();
         
         this.addCheckersToField(this.fields[0], CheckerColor.WHITE, 2);
@@ -116,6 +116,10 @@ class Game {
         this.blackBarUpdate = blackBarUpdate;
     }
 
+    getCheckerColorAt(fieldNo){
+        return this.board.fields[fieldNo][0].color;
+    }
+
     roll(){
         return{dice1: this.dice1.roll(), dice2: this.dice2.roll()};
     }
@@ -138,19 +142,40 @@ class Game {
         barUpdateFunc(bar.length);
     }
 
-    move (srcFieldNo, destFieldNo){
+    isValidMove (srcFieldNo, destFieldNo){
         if (!this.isValidField(srcFieldNo) || 
             !this.isValidField(destFieldNo))
             return false;
-        
+
         let srcField = this.board.fields[srcFieldNo];
         let destField = this.board.fields[destFieldNo];
 
-        if (srcField.length == 0 || 
-            srcField[0].color != this.turn ||
-            (destField.length > 1 && srcField[0].color != destField[0].color))
+        return srcField.length != 0 &&
+          srcField[0].color == this.turn &&
+            (destField.length == 0 || 
+              srcField[0].color == destField[0].color ||
+              destField.length == 1) &&
+            this.isMoveInRightDirection(srcFieldNo, destFieldNo);
+    }
+
+    isMoveInRightDirection(srcFieldNo, destFieldNo) {
+        switch(this.getCheckerColorAt(srcFieldNo)){
+            case CheckerColor.WHITE:
+                return destFieldNo > srcFieldNo;
+            case CheckerColor.BLACK:
+                return destFieldNo < srcFieldNo;
+            default:
+                return false;
+        }
+    }
+
+    move (srcFieldNo, destFieldNo){
+        if (!this.isValidMove(srcFieldNo, destFieldNo))
             return false;
-        
+
+        let srcField = this.board.fields[srcFieldNo];
+        let destField = this.board.fields[destFieldNo];
+    
         if (destField.length > 0 && srcField[0].color != destField[0].color){
             this.updateBar(destField.pop());
             destField.push(srcField.pop());
